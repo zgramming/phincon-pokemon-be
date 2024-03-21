@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc -w",
+    "build:watch": "npx tsc -w",
     "start": "node dist/app.js",
     "dev": "tsx watch src/app.ts",
     "prisma:build": "npm run prisma:migrate && npm run prisma:generate && npm run prisma:format",
@@ -12,7 +12,7 @@
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
     "prisma:format": "npx prisma format",
-    "prisma:seeder": "ts-node prisma/seeds/seed.ts",
+    "prisma:seeder": "tsx prisma/seeds/seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -25,6 +25,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.4.3"
   },

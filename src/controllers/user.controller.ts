@@ -2,7 +2,9 @@ import UserService from '@services/user.service';
 import { Request, Response } from 'express';
 
 class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    this.userService = userService;
+  }
 
   async get(req: Request, res: Response) {
     const query = req.query;

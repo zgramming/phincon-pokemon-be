@@ -1,5 +1,6 @@
 import { BaseQueryParamsDTO } from '@dto/base-query-params.dto';
 import { prisma } from '@utils/prisma';
+import { hashSync } from 'bcrypt';
 
 interface FindAllQueryParams extends BaseQueryParamsDTO {
   name?: string;
@@ -49,6 +50,7 @@ class UserService {
     const result = await prisma.users.create({
       data: {
         ...data,
+        password: hashSync(data.password, 10),
       },
     });
 
@@ -62,6 +64,7 @@ class UserService {
       },
       data: {
         ...data,
+        password: data.password ? hashSync(data.password, 10) : undefined,
       },
     });
 
