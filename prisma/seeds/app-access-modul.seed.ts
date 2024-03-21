@@ -7,25 +7,19 @@ export const AppAccessModulSeeder = async () => {
 
   const modulForUser = await prisma.appModul.findMany({
     where: {
-      code: {
-        in: ['MAIN-MENU-USER'],
-      },
+      code: 'MAIN-MENU-USER',
     },
   });
 
   const modulForManager = await prisma.appModul.findMany({
     where: {
-      code: {
-        in: ['MAIN-MENU-MANAGER'],
-      },
+      code: 'MAIN-MENU-MANAGER',
     },
   });
 
   const modulForSuperadmin = await prisma.appModul.findMany({
     where: {
-      code: {
-        in: ['SYSTEM-SETTING'],
-      },
+      code: 'SYSTEM-SETTING',
     },
   });
 

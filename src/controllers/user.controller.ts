@@ -16,7 +16,7 @@ class UserController {
       name,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'User list',
@@ -30,7 +30,7 @@ class UserController {
 
     const result = await this.userService.findById(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'User detail',
@@ -44,7 +44,7 @@ class UserController {
 
     const result = await this.userService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'User created',
@@ -59,7 +59,7 @@ class UserController {
 
     const result = await this.userService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'User updated',
@@ -73,7 +73,7 @@ class UserController {
 
     const result = await this.userService.delete(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'User deleted',

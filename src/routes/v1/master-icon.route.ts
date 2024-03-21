@@ -1,15 +1,16 @@
 import express from 'express';
 import masterIconController from '@controllers/master-icon.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', masterIconController.get);
-router.get('/:id', masterIconController.getById);
+router.get('/', expressAsyncHandler(masterIconController.get));
+router.get('/:id', expressAsyncHandler(masterIconController.getById));
 
-router.post('/', masterIconController.create);
+router.post('/', expressAsyncHandler(masterIconController.create));
 
-router.put('/:id', masterIconController.update);
+router.put('/:id', expressAsyncHandler(masterIconController.update));
 
-router.delete('/:id', masterIconController.delete);
+router.delete('/:id', expressAsyncHandler(masterIconController.delete));
 
 export default router;

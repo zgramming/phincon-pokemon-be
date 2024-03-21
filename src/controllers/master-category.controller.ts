@@ -14,7 +14,7 @@ class MasterCategoryController {
       name: query.name as string | undefined,
     });
 
-    return res
+    res
       .json({
         error: false,
         meessage: 'Success',
@@ -28,7 +28,7 @@ class MasterCategoryController {
 
     const result = await this.masterCategoryService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -42,7 +42,7 @@ class MasterCategoryController {
 
     const result = await this.masterCategoryService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -57,7 +57,7 @@ class MasterCategoryController {
 
     const result = await this.masterCategoryService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -71,7 +71,7 @@ class MasterCategoryController {
 
     const result = await this.masterCategoryService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',

@@ -14,7 +14,7 @@ class ParameterController {
       name: query.name as string | undefined,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -28,7 +28,7 @@ class ParameterController {
 
     const result = await this.parameterService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -42,7 +42,7 @@ class ParameterController {
 
     const result = await this.parameterService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -57,7 +57,7 @@ class ParameterController {
 
     const result = await this.parameterService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -71,7 +71,7 @@ class ParameterController {
 
     const result = await this.parameterService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',

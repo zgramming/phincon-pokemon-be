@@ -14,7 +14,7 @@ class AppCategoryModulController {
       name: query.name as string | undefined,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -28,7 +28,7 @@ class AppCategoryModulController {
 
     const result = await this.appCategoryModulService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -42,7 +42,7 @@ class AppCategoryModulController {
 
     const result = await this.appCategoryModulService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -57,7 +57,7 @@ class AppCategoryModulController {
 
     const result = await this.appCategoryModulService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -71,7 +71,7 @@ class AppCategoryModulController {
 
     const result = await this.appCategoryModulService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',

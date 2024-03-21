@@ -16,7 +16,7 @@ class RoleController {
       name,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Role list',
@@ -30,7 +30,7 @@ class RoleController {
 
     const result = await this.roleService.findById(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'Role detail',
@@ -44,7 +44,7 @@ class RoleController {
 
     const result = await this.roleService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Role created',
@@ -58,7 +58,7 @@ class RoleController {
     const { id } = req.params;
     const result = await this.roleService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Role updated',
@@ -71,7 +71,7 @@ class RoleController {
     const { id } = req.params;
     const result = await this.roleService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Role deleted',

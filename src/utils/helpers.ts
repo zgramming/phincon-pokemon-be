@@ -58,7 +58,8 @@ export const moveFile = (
 };
 
 export const generateTokenJWT = (payload: any) => {
-  const secretKey = process.env.JWT_SECRECT_KEY ?? '-';
+  const randomString = generateUUID();
+  const secretKey = process.env.JWT_SECRECT_KEY ?? randomString;
   const token = jwt.sign(payload, secretKey, { expiresIn: '1 days' });
 
   return token;

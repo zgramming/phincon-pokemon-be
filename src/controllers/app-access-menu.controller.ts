@@ -9,7 +9,7 @@ class AppAccessMenuController {
 
     const result = await this.appAccessMenuService.createBulk(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Data has been created',

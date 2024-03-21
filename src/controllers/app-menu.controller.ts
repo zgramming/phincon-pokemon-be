@@ -14,7 +14,7 @@ class AppMenuController {
       name: query.name as string | undefined,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -28,7 +28,7 @@ class AppMenuController {
 
     const result = await this.appMenuService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -42,7 +42,7 @@ class AppMenuController {
 
     const result = await this.appMenuService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -57,7 +57,7 @@ class AppMenuController {
 
     const result = await this.appMenuService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
@@ -71,7 +71,7 @@ class AppMenuController {
 
     const result = await this.appMenuService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',

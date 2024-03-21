@@ -118,6 +118,22 @@ export const AppMenuSeeder = async () => {
         name: 'Parameter',
         route: '/system/setting/parameter',
       },
+      {
+        id: 999,
+        app_category_modul_id: categoryModul.find((val) => val.code === 'SYSTEM')?.id || 0,
+        app_modul_id: modul.find((val) => val.code === 'SYSTEM-SETTING')?.id || 0,
+        code: 'SYSTEM-SETTING-EXAMPLE',
+        name: 'Example',
+        route: '/system/setting/example',
+      },
+      {
+        app_menu_id_parent: 999,
+        app_category_modul_id: categoryModul.find((val) => val.code === 'SYSTEM')?.id || 0,
+        app_modul_id: modul.find((val) => val.code === 'SYSTEM-SETTING')?.id || 0,
+        code: 'SYSTEM-SETTING-EXAMPLE-CHILD',
+        name: 'Example Child',
+        route: '/system/setting/example/child',
+      },
     ],
   });
 

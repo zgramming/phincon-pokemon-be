@@ -9,7 +9,7 @@ class AppAccessModulController {
 
     const result = await this.appAccessModulService.createBulk(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Data has been created',

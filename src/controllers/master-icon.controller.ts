@@ -13,7 +13,7 @@ class MasterIconController {
       limit: Number(limit),
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon list',
@@ -27,7 +27,7 @@ class MasterIconController {
 
     const result = await this.masterIconService.findById(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon detail',
@@ -41,7 +41,7 @@ class MasterIconController {
 
     const result = await this.masterIconService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon created',
@@ -56,7 +56,7 @@ class MasterIconController {
 
     const result = await this.masterIconService.update(Number(id), data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon updated',
@@ -70,7 +70,7 @@ class MasterIconController {
 
     const result = await this.masterIconService.delete(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon deleted',

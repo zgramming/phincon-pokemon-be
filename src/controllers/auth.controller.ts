@@ -1,3 +1,4 @@
+import { AuthLoginResponseEntity } from '@entities/auth-login-response.entity';
 import AuthService from '@services/auth.service';
 import { Request, Response } from 'express';
 
@@ -9,7 +10,7 @@ class AuthController {
 
     const result = await this.authService.login(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Login success',
@@ -19,11 +20,11 @@ class AuthController {
   };
 
   accessibleContent = async (req: Request, res: Response) => {
-    const { roleId } = req.params;
+    const { roleId } = res.locals.user as AuthLoginResponseEntity;
 
     const result = await this.authService.accessibleContent(+roleId);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success fetching accessible content',
