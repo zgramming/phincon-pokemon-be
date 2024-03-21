@@ -5,6 +5,7 @@ import express from 'express';
 import routes from '@routes/api';
 import { isPrismaConnected } from '@utils/prisma';
 
+// Load environment variables
 dotEnv.config();
 
 const app = express();
