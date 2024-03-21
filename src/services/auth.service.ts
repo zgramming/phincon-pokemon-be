@@ -12,7 +12,7 @@ interface AuthLoginDTO {
 
 class AuthService {
   async login(data: AuthLoginDTO) {
-    const userByUsername = await prisma.users.findUnique({
+    const userByUsername = await prisma.users.findFirst({
       where: {
         username: data.username,
       },
