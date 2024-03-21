@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 class AppAccessMenuController {
   constructor(private appAccessMenuService: AppAccessMenuService) {}
 
-  async createBulk(req: Request, res: Response) {
+  createBulk = async (req: Request, res: Response) => {
     const data = req.body;
 
     const result = await this.appAccessMenuService.createBulk(data);
@@ -16,7 +16,7 @@ class AppAccessMenuController {
         data: result,
       })
       .status(201);
-  }
+  };
 }
 
 export default new AppAccessMenuController(new AppAccessMenuService());

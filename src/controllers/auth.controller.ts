@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 class AuthController {
   constructor(private authService: AuthService) {}
 
-  async login(req: Request, res: Response) {
+  login = async (req: Request, res: Response) => {
     const data = req.body;
 
     const result = await this.authService.login(data);
@@ -16,9 +16,9 @@ class AuthController {
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async accessibleContent(req: Request, res: Response) {
+  accessibleContent = async (req: Request, res: Response) => {
     const { roleId } = req.params;
 
     const result = await this.authService.accessibleContent(+roleId);
@@ -30,7 +30,7 @@ class AuthController {
         data: result,
       })
       .status(200);
-  }
+  };
 }
 
 export default new AuthController(new AuthService());

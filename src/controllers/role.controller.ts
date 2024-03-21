@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 class RoleController {
   constructor(private roleService: RoleService) {}
 
-  async get(req: Request, res: Response) {
+  get = async (req: Request, res: Response) => {
     const query = req.query;
     const page = query.page || 1;
     const limit = query.limit || 10;
@@ -23,9 +23,9 @@ class RoleController {
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async getById(req: Request, res: Response) {
+  getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.roleService.findById(Number(id));
@@ -37,9 +37,9 @@ class RoleController {
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async create(req: Request, res: Response) {
+  create = async (req: Request, res: Response) => {
     const data = req.body;
 
     const result = await this.roleService.create(data);
@@ -51,9 +51,9 @@ class RoleController {
         data: result,
       })
       .status(201);
-  }
+  };
 
-  async update(req: Request, res: Response) {
+  update = async (req: Request, res: Response) => {
     const data = req.body;
     const { id } = req.params;
     const result = await this.roleService.update(+id, data);
@@ -65,12 +65,11 @@ class RoleController {
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const { id } = req.params;
-
-    const result = await this.roleService.delete(Number(id));
+    const result = await this.roleService.delete(+id);
 
     return res
       .json({
@@ -79,7 +78,7 @@ class RoleController {
         data: result,
       })
       .status(200);
-  }
+  };
 }
 
 export default new RoleController(new RoleService());
