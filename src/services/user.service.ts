@@ -4,6 +4,7 @@ import { hashSync } from 'bcrypt';
 
 interface FindAllQueryParams extends BaseQueryParamsDTO {
   name?: string;
+  role_id?: number;
 }
 interface UserCreateDTO {
   role_id: number;
@@ -22,7 +23,7 @@ interface UserUpdateDTO extends Partial<UserCreateDTO> {
 }
 
 class UserService {
-  async findAll({ limit, page, name }: FindAllQueryParams) {
+  async findAll({ limit, page, name, role_id }: FindAllQueryParams) {
     const result = await prisma.users.findMany({
       take: limit,
       skip: (page - 1) * limit,
@@ -30,10 +31,30 @@ class UserService {
         name: {
           contains: name,
         },
+        role_id: role_id,
+      },
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 
-    return result;
+    const total = await prisma.users.count({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {
@@ -65,6 +86,19 @@ class UserService {
       data: {
         ...data,
         password: data.password ? hashSync(data.password, 10) : undefined,
+      },
+    });
+
+    return result;
+  }
+
+  async changePassword(id: number, password: string) {
+    const result = await prisma.users.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: hashSync(password, 10),
       },
     });
 

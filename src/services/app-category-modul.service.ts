@@ -28,7 +28,18 @@ class AppCategoryModulService {
       },
     });
 
-    return result;
+    const total = await prisma.appCategoryModul.count({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

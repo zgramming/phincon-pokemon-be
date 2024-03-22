@@ -6,18 +6,23 @@ class AppModulControler {
 
   get = async (req: Request, res: Response) => {
     const query = req.query;
-    const { page = 1, limit = 100 } = query || {};
+    const page = query.page || 1;
+    const limit = query.limit || 100;
+    const name = query.name as string | undefined;
+    const categoryModulId = query.category_modul_id as string | undefined;
 
-    const result = await this.appModulService.findAll({
+    const { data: result, total } = await this.appModulService.findAll({
       page: +page,
       limit: +limit,
-      name: query.name as string | undefined,
+      name,
+      category_modul_id: categoryModulId ? +categoryModulId : undefined,
     });
 
     res
       .json({
         error: false,
         message: 'Success',
+        total,
         data: result,
       })
       .status(200);

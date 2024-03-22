@@ -29,7 +29,18 @@ class ParameterService {
       },
     });
 
-    return result;
+    const total = await prisma.parameter.count({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

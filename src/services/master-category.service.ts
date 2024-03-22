@@ -28,7 +28,18 @@ class MasterCategoryService {
       },
     });
 
-    return result;
+    const total = await prisma.masterCategory.count({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

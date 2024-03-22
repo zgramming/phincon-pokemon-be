@@ -6,18 +6,21 @@ class MasterCategoryController {
 
   get = async (req: Request, res: Response) => {
     const query = req.query;
-    const { page = 1, limit = 100 } = query || {};
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const name = query.name as string | undefined;
 
-    const result = await this.masterCategoryService.findAll({
+    const { data: result, total } = await this.masterCategoryService.findAll({
       page: +page,
       limit: +limit,
-      name: query.name as string | undefined,
+      name,
     });
 
     res
       .json({
         error: false,
         meessage: 'Success',
+        total,
         data: result,
       })
       .status(200);

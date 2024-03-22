@@ -8,7 +8,7 @@ class AppCategoryModulController {
     const query = req.query;
     const { page = 1, limit = 100 } = query || {};
 
-    const result = await this.appCategoryModulService.findAll({
+    const { data: result, total } = await this.appCategoryModulService.findAll({
       page: +page,
       limit: +limit,
       name: query.name as string | undefined,
@@ -19,6 +19,7 @@ class AppCategoryModulController {
         error: false,
         message: 'Success',
         data: result,
+        total,
       })
       .status(200);
   };

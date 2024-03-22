@@ -10,7 +10,7 @@ class RoleController {
     const limit = query.limit || 10;
     const name = query.name as string | undefined;
 
-    const result = await this.roleService.findAll({
+    const { data: result, total } = await this.roleService.findAll({
       page: Number(page),
       limit: Number(limit),
       name,
@@ -21,6 +21,7 @@ class RoleController {
         error: false,
         message: 'Role list',
         data: result,
+        total,
       })
       .status(200);
   };

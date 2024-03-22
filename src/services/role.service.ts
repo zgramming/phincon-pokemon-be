@@ -28,7 +28,18 @@ class RoleService {
       },
     });
 
-    return result;
+    const total = await prisma.role.count({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {
