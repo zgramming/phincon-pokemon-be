@@ -9,6 +9,32 @@ interface AppAccessModulCreateDTO {
 }
 
 class AppAccessModulService {
+  async findManyByRoleId(roleId: number) {
+    const appGroupModul = await prisma.appAccessModul.findMany({
+      where: {
+        role_id: roleId,
+      },
+      include: {
+        app_modul: true,
+      },
+    });
+    const appGroupModulIds = appGroupModul.map((item) => item.app_modul_id);
+
+    const modul = await prisma.appModul.findMany({
+      include: {
+        app_category_modul: true,
+      },
+    });
+
+    const existInModul = modul.filter((item) => appGroupModulIds.includes(item.id));
+    const notExistInModul = modul.filter((item) => !appGroupModulIds.includes(item.id));
+
+    return {
+      dataExist: existInModul,
+      dataNotExist: notExistInModul,
+    };
+  }
+
   async createBulk(data: AppAccessModulCreateDTO[]) {
     if (data.length <= 0) {
       throw new InvariantError('Data cannot be empty');
