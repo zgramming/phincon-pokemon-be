@@ -1,5 +1,4 @@
 import InvariantError from '@utils/exceptions/invariant-error';
-import NotFoundError from '@utils/exceptions/notfound-error';
 import { prisma } from '@utils/prisma';
 
 interface AppAccessMenuCreateDTO {
