@@ -4,6 +4,8 @@ import { prisma } from '@utils/prisma';
 
 interface AppAccessMenuCreateDTO {
   role_id: number;
+  app_category_modul_id: number;
+  app_modul_id: number;
   app_menu_id: number;
   permissions: string[];
   created_by: number;
@@ -86,23 +88,6 @@ class AppAccessMenuService {
     }
 
     const firstData = data[0];
-    const menu = await prisma.appMenu.findUnique({
-      where: {
-        id: firstData.app_menu_id,
-      },
-    });
-
-    if (!menu) {
-      throw new NotFoundError('Menu not found');
-    }
-
-    const mapping = data.map((item) => {
-      return {
-        ...item,
-        app_category_modul_id: menu.app_category_modul_id,
-        app_modul_id: menu.app_modul_id,
-      };
-    });
 
     const result = await prisma.$transaction(async (trx) => {
       // Delete all data by role_id then create new data
@@ -114,8 +99,8 @@ class AppAccessMenuService {
 
       return await trx.appAccessMenu.createMany({
         data: data.map((item) => ({
-          app_category_modul_id: menu.app_category_modul_id,
-          app_modul_id: menu.app_modul_id,
+          app_category_modul_id: item.app_category_modul_id,
+          app_modul_id: item.app_modul_id,
           role_id: item.role_id,
           app_menu_id: item.app_menu_id,
           permissions: item.permissions,
