@@ -25,6 +25,7 @@ class ParameterService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
@@ -33,6 +34,7 @@ class ParameterService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });

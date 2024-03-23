@@ -28,7 +28,7 @@ class AuthService {
     }
 
     const payload: AuthLoginResponseEntity = {
-      idUser: userByUsername.id,
+      userId: userByUsername.id,
       username: userByUsername.username,
       roleId: userByUsername.role_id,
     };

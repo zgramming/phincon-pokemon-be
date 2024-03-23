@@ -28,6 +28,7 @@ class AppModulService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
         app_category_modul_id: category_modul_id,
       },
@@ -46,7 +47,9 @@ class AppModulService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
+        app_category_modul_id: category_modul_id,
       },
     });
 
@@ -69,7 +72,12 @@ class AppModulService {
   async create(data: AppModulCreateDTO) {
     const result = await prisma.appModul.create({
       data: {
-        ...data,
+        code: data.code,
+        name: data.name,
+        order: data.order,
+        status: data.status,
+        created_by: data.created_by,
+        app_category_modul_id: data.app_category_modul_id,
       },
     });
 

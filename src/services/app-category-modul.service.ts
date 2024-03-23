@@ -24,6 +24,7 @@ class AppCategoryModulService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
@@ -32,6 +33,7 @@ class AppCategoryModulService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });

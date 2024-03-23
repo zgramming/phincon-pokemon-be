@@ -17,11 +17,11 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
     }
 
     const decode = jwt.verify(token, config.SECRET_KEY);
-    const { idUser, roleId, username } = decode as AuthLoginResponseEntity;
+    const { userId, roleId, username } = decode as AuthLoginResponseEntity;
 
     // Inject decode as user to res.locals
     res.locals.user = {
-      idUser,
+      userId,
       roleId,
       username,
     };

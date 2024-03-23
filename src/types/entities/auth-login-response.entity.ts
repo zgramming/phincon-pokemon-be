@@ -1,5 +1,5 @@
 export interface AuthLoginResponseEntity {
-  idUser: number;
+  userId: number;
   username: string;
   roleId: number;
 }

@@ -24,6 +24,7 @@ class MasterCategoryService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
@@ -32,6 +33,7 @@ class MasterCategoryService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });

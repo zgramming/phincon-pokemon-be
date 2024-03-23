@@ -28,8 +28,9 @@ class UserService {
       take: limit,
       skip: (page - 1) * limit,
       where: {
-        name: {
+        name: { 
           contains: name,
+          mode: 'insensitive',
         },
         role_id: role_id,
       },
@@ -47,6 +48,7 @@ class UserService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });

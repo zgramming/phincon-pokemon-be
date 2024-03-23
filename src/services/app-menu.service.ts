@@ -31,6 +31,7 @@ class AppMenuService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
         app_category_modul_id: category_modul_id,
         app_modul_id: modul_id,
@@ -57,6 +58,7 @@ class AppMenuService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
         app_category_modul_id: category_modul_id,
         app_modul_id: modul_id,

@@ -4,6 +4,7 @@ import { prisma } from '@utils/prisma';
 
 interface AppAccessModulCreateDTO {
   role_id: number;
+  app_category_modul_id: number;
   app_modul_id: number;
   created_by: number;
 }
@@ -41,20 +42,10 @@ class AppAccessModulService {
     }
 
     const firstData = data[0];
-    const modul = await prisma.appModul.findUnique({
-      where: {
-        id: firstData.app_modul_id,
-      },
-    });
-
-    if (!modul) {
-      throw new NotFoundError('Modul not found');
-    }
 
     const mapping = data.map((item) => {
       return {
         ...item,
-        app_category_modul_id: modul.app_category_modul_id,
       };
     });
 

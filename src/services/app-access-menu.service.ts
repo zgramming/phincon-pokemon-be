@@ -11,8 +11,6 @@ interface AppAccessMenuCreateDTO {
 
 class AppAccessMenuService {
   async getByRoleId(roleId: number, categoryModulId: number) {
-    console.log({ roleId, categoryModulId });
-
     const accessModulByRole = await prisma.appAccessModul.findMany({
       where: {
         role_id: roleId,
@@ -60,7 +58,7 @@ class AppAccessMenuService {
       return {
         ...item.app_modul,
       };
-    }); // Mapping only modul
+    });
 
     const accessMenuByRole = await prisma.appAccessMenu.findMany({
       where: {

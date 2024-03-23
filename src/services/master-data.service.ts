@@ -36,6 +36,7 @@ class MasterDataService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
         master_category_id: master_category_id ? +master_category_id : undefined,
       },
@@ -54,6 +55,7 @@ class MasterDataService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
