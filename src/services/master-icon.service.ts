@@ -1,7 +1,7 @@
 import { BaseQueryParamsDTO } from '@dto/base-query-params.dto';
 import { kDirUploadMasterIcon } from '@utils/constant';
 import NotFoundError from '@utils/exceptions/notfound-error';
-import { generateUUID, moveFile } from '@utils/helpers';
+import { moveFile } from '@utils/helpers';
 import { prisma } from '@utils/prisma';
 import formidable from 'formidable';
 
@@ -13,7 +13,7 @@ interface MasterIconCreateDTO {
   name: string;
   code: string;
   status: any;
-  icon: formidable.File;
+  icon?: formidable.File;
   created_by: number;
 }
 
@@ -66,10 +66,13 @@ class MasterIconService {
           code: data.code,
           name: data.name,
           status: data.status,
-          icon_url: data.icon.newFilename ?? '',
+          icon_url: data.icon?.newFilename ?? '',
         },
       });
-      moveFile(data.icon.filepath, `${kDirUploadMasterIcon}/${result.icon_url}`);
+
+      if (data.icon && result) {
+        moveFile(data.icon?.filepath ?? '', `${kDirUploadMasterIcon}/${result.icon_url}`);
+      }
     });
 
     return transaction;
@@ -77,7 +80,9 @@ class MasterIconService {
 
   async update(id: number, data: MasterIconUpdateDTO) {
     const transaction = await prisma.$transaction(async (trx) => {
-      const masterIcon = await trx.appMasterIcon.findUnique({
+      console.log({ data, id });
+
+      const masterIcon = await trx.appMasterIcon.findFirst({
         where: {
           id,
         },
@@ -92,12 +97,14 @@ class MasterIconService {
           id,
         },
         data: {
-          ...data,
+          name: data.name ?? masterIcon.name,
+          code: data.code ?? masterIcon.code,
+          status: data.status ?? masterIcon.status,
           icon_url: data.icon ? masterIcon.icon_url : undefined,
         },
       });
 
-      if (data.icon) {
+      if (data.icon && result) {
         moveFile(data.icon.filepath, `${kDirUploadMasterIcon}/${result.icon_url}`);
       }
 
