@@ -37,6 +37,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
         });
       }
 
+      
       return res.status(401).json({
         error: true,
         data: null,
