@@ -5,6 +5,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ValidateFileType } from '@dto/validate-filetype.dto';
 import { ValidateFileResult } from '@entities/validate-fileresult.entity';
+import { config } from './config';
 
 export const generateUUID = (): string => uuidv4();
 
@@ -58,8 +59,7 @@ export const moveFile = (
 };
 
 export const generateTokenJWT = (payload: any) => {
-  const randomString = generateUUID();
-  const secretKey = process.env.JWT_SECRECT_KEY ?? randomString;
+  const secretKey = config.SECRET_KEY;
   const token = jwt.sign(payload, secretKey, { expiresIn: '1 days' });
 
   return token;
