@@ -4,81 +4,86 @@ import { Request, Response } from 'express';
 class MasterDataController {
   constructor(private masterDataService: MasterDataService) {}
 
-  async get(req: Request, res: Response) {
+  get = async (req: Request, res: Response) => {
     const query = req.query;
-    const { page = 1, limit = 100 } = query || {};
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const name = query.name as string | undefined;
+    const masterCategoryId = query.master_category_id as string | undefined;
 
-    const result = await this.masterDataService.findAll({
+    const { data: result, total } = await this.masterDataService.findAll({
       page: +page,
       limit: +limit,
-      name: query.name as string | undefined,
+      name,
+      master_category_id: masterCategoryId,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
+        total,
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async getById(req: Request, res: Response) {
+  getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.masterDataService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async create(req: Request, res: Response) {
+  create = async (req: Request, res: Response) => {
     const data = req.body;
 
     const result = await this.masterDataService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(201);
-  }
+  };
 
-  async update(req: Request, res: Response) {
+  update = async (req: Request, res: Response) => {
     const data = req.body;
     const { id } = req.params;
 
     const result = await this.masterDataService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.masterDataService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 }
 
 export default new MasterDataController(new MasterDataService());

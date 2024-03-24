@@ -6,34 +6,33 @@ import { prisma } from '@utils/prisma';
 interface FindAllQueryParams extends BaseQueryParamsDTO {
   name?: string;
 }
-interface RoleCreateDTO {
+interface TemplateDokumenCreateDTO {
   code: string;
   name: string;
+  template: string;
   status: any;
   created_by: number;
 }
-interface RoleUpdateDTO extends Partial<RoleCreateDTO> {
+interface TemplateDokumenUpdateDTO extends Partial<TemplateDokumenCreateDTO> {
   updated_by: number;
 }
 
-class RoleService {
+class TemplateDokumenService {
   async findAll({ limit, page, name }: FindAllQueryParams) {
-    const result = await prisma.role.findMany({
+    const result = await prisma.templateDokumen.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         name: {
           contains: name,
-          mode: 'insensitive',
         },
       },
     });
 
-    const total = await prisma.role.count({
+    const total = await prisma.templateDokumen.count({
       where: {
         name: {
           contains: name,
-          mode: 'insensitive',
         },
       },
     });
@@ -45,7 +44,7 @@ class RoleService {
   }
 
   async findById(id: number) {
-    const result = await prisma.role.findUnique({
+    const result = await prisma.templateDokumen.findUnique({
       where: {
         id,
       },
@@ -54,53 +53,44 @@ class RoleService {
     return result;
   }
 
-  async create(data: RoleCreateDTO) {
-    const isCodeExists = await prisma.role.findFirst({
+  async create(data: TemplateDokumenCreateDTO) {
+    const isCodeExists = await prisma.templateDokumen.findFirst({
       where: {
         code: data.code,
       },
     });
 
     if (isCodeExists) {
-      throw new ConflictedError('Role code already exists');
+      throw new ConflictedError('Code already exists');
     }
 
-    const result = await prisma.role.create({
+    const result = await prisma.templateDokumen.create({
       data: {
-        ...data,
+        code: data.code,
+        name: data.name,
+        template: data.template,
+        status: data.status,
+        created_by: data.created_by,
       },
     });
 
     return result;
   }
 
-  async update(id: number, data: RoleUpdateDTO) {
-    const isExists = await prisma.role.findFirst({
+  async update(id: number, data: TemplateDokumenUpdateDTO) {
+    const isExists = await prisma.templateDokumen.findFirst({
       where: {
         id: id,
       },
     });
 
     if (!isExists) {
-      throw new NotFoundError('Role not found');
+      throw new NotFoundError('Data not found');
     }
 
-    const codeExists = await prisma.role.findFirst({
+    const result = await prisma.templateDokumen.update({
       where: {
-        code: data.code,
-        id: {
-          not: id,
-        },
-      },
-    });
-
-    if (codeExists) {
-      throw new ConflictedError('Role code already exists');
-    }
-
-    const result = await prisma.role.update({
-      where: {
-        id: id,
+        id,
       },
       data: {
         ...data,
@@ -111,17 +101,17 @@ class RoleService {
   }
 
   async delete(id: number) {
-    const isExists = await prisma.role.findFirst({
+    const isExists = await prisma.templateDokumen.findFirst({
       where: {
-        id,
+        id: id,
       },
     });
 
     if (!isExists) {
-      throw new NotFoundError('Role not found');
+      throw new NotFoundError('Data not found');
     }
 
-    const result = await prisma.role.delete({
+    const result = await prisma.templateDokumen.delete({
       where: {
         id,
       },
@@ -131,4 +121,4 @@ class RoleService {
   }
 }
 
-export default RoleService;
+export default TemplateDokumenService;

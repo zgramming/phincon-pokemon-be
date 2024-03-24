@@ -25,11 +25,24 @@ class ParameterService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
 
-    return result;
+    const total = await prisma.parameter.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

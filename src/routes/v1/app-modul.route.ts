@@ -1,15 +1,16 @@
 import express from 'express';
 import appModulController from '@controllers/app-modul.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', appModulController.get);
-router.get('/:id', appModulController.getById);
+router.get('/', expressAsyncHandler(appModulController.get));
+router.get('/:id', expressAsyncHandler(appModulController.getById));
 
-router.post('/', appModulController.create);
+router.post('/', expressAsyncHandler(appModulController.create));
 
-router.put('/:id', appModulController.update);
+router.put('/:id', expressAsyncHandler(appModulController.update));
 
-router.delete('/:id', appModulController.delete);
+router.delete('/:id', expressAsyncHandler(appModulController.delete));
 
 export default router;

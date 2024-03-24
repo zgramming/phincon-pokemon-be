@@ -1,83 +1,152 @@
 import MasterIconService from '@services/master-icon.service';
+import { kDirUploadMasterIcon } from '@utils/constant';
+import { generateUUID } from '@utils/helpers';
 import { Request, Response } from 'express';
+import formidable from 'formidable';
 
 class MasterIconController {
   constructor(private masterIconService: MasterIconService) {}
 
-  async get(req: Request, res: Response) {
+  get = async (req: Request, res: Response) => {
     const query = req.query;
-    const { page = 1, limit = 100 } = query || {};
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const name = query.name as string | undefined;
 
-    const result = await this.masterIconService.findAll({
+    const { result, total } = await this.masterIconService.findAll({
       page: Number(page),
       limit: Number(limit),
+      name,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon list',
+        total,
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async getById(req: Request, res: Response) {
+  getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.masterIconService.findById(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon detail',
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async create(req: Request, res: Response) {
-    const data = req.body;
+  create = async (req: Request, res: Response) => {
+    const form = formidable({
+      uploadDir: kDirUploadMasterIcon,
+      keepExtensions: true,
+      filename(name, ext, part, form) {
+        return `${generateUUID()}${ext}`;
+      },
+    });
 
-    const result = await this.masterIconService.create(data);
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        res
+          .json({
+            error: true,
+            message: 'Failed to upload icon',
+            data: err,
+          })
+          .status(400);
+      }
 
-    return res
-      .json({
-        error: false,
-        message: 'Master Icon created',
-        data: result,
-      })
-      .status(201);
-  }
+      const name = fields['name'] ? fields['name'][0] : '';
+      const code = fields['code'] ? fields['code'][0] : '';
+      const status = fields['status'] ? fields['status'][0] : 'active';
+      const created_by = fields['created_by'] ? fields['created_by'][0] : 0;
+      const icon = files['icon'] ? files['icon'][0] : undefined;
 
-  async update(req: Request, res: Response) {
-    const data = req.body;
+      const result = await this.masterIconService.create({
+        name,
+        code,
+        status,
+        created_by: +created_by,
+        icon,
+      });
+
+      res
+        .json({
+          error: false,
+          message: 'Master Icon created',
+          data: result,
+        })
+        .status(201);
+    });
+  };
+
+  update = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const result = await this.masterIconService.update(+id, data);
+    const form = formidable({
+      uploadDir: kDirUploadMasterIcon,
+      keepExtensions: true,
+      filename(name, ext, part, form) {
+        return `${generateUUID()}${ext}`;
+      },
+    });
 
-    return res
-      .json({
-        error: false,
-        message: 'Master Icon updated',
-        data: result,
-      })
-      .status(200);
-  }
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        res
+          .json({
+            error: true,
+            message: 'Failed to upload icon',
+            data: err,
+          })
+          .status(400);
+      }
 
-  async delete(req: Request, res: Response) {
+      const name = fields['name'] ? fields['name'][0] : '';
+      const code = fields['code'] ? fields['code'][0] : '';
+      const status = fields['status'] ? fields['status'][0] : 'active';
+      const updated_by = fields['updated_by'] ? fields['updated_by'][0] : 0;
+      const icon = files['icon'] ? files['icon'][0] : undefined;
+   
+
+      const result = await this.masterIconService.update(Number(id), {
+        name,
+        code,
+        status,
+        updated_by: +updated_by,
+        icon,
+      });
+
+      res
+        .json({
+          error: false,
+          message: 'Master Icon updated',
+          data: result,
+        })
+        .status(200);
+    });
+  };
+
+  delete = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.masterIconService.delete(Number(id));
 
-    return res
+    res
       .json({
         error: false,
         message: 'Master Icon deleted',
         data: result,
       })
       .status(200);
-  }
+  };
 }
 
 export default new MasterIconController(new MasterIconService());

@@ -1,14 +1,15 @@
 import express from 'express';
 import roleController from '@controllers/role.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', roleController.get);
-router.get('/:id', roleController.getById);
+router.get('/', expressAsyncHandler(roleController.get));
+router.get('/:id', expressAsyncHandler(roleController.getById));
 
-router.post('/', roleController.create);
-router.put('/:id', roleController.update);
+router.post('/', expressAsyncHandler(roleController.create));
+router.put('/:id', expressAsyncHandler(roleController.update));
 
-router.delete('/:id', roleController.delete);
+router.delete('/:id', expressAsyncHandler(roleController.delete));
 
 export default router;

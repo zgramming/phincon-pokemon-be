@@ -1,15 +1,16 @@
 import express from 'express';
 import parameterController from '@controllers/parameter.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', parameterController.get);
-router.get('/:id', parameterController.getById);
+router.get('/', expressAsyncHandler(parameterController.get));
+router.get('/:id', expressAsyncHandler(parameterController.getById));
 
-router.post('/', parameterController.create);
+router.post('/', expressAsyncHandler(parameterController.create));
 
-router.put('/:id', parameterController.update);
+router.put('/:id', expressAsyncHandler(parameterController.update));
 
-router.delete('/:id', parameterController.delete);
+router.delete('/:id', expressAsyncHandler(parameterController.delete));
 
 export default router;

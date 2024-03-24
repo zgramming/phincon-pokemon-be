@@ -4,31 +4,48 @@ import { prisma } from '@utils/prisma';
 
 interface AppAccessModulCreateDTO {
   role_id: number;
+  app_category_modul_id: number;
   app_modul_id: number;
   created_by: number;
 }
 
 class AppAccessModulService {
+  async findManyByRoleId(roleId: number) {
+    const appGroupModul = await prisma.appAccessModul.findMany({
+      where: {
+        role_id: roleId,
+      },
+      include: {
+        app_modul: true,
+      },
+    });
+    const appGroupModulIds = appGroupModul.map((item) => item.app_modul_id);
+
+    const modul = await prisma.appModul.findMany({
+      include: {
+        app_category_modul: true,
+      },
+    });
+
+    const existInModul = modul.filter((item) => appGroupModulIds.includes(item.id));
+    const notExistInModul = modul.filter((item) => !appGroupModulIds.includes(item.id));
+
+    return {
+      dataExist: existInModul,
+      dataNotExist: notExistInModul,
+    };
+  }
+
   async createBulk(data: AppAccessModulCreateDTO[]) {
     if (data.length <= 0) {
       throw new InvariantError('Data cannot be empty');
     }
 
     const firstData = data[0];
-    const modul = await prisma.appModul.findUnique({
-      where: {
-        id: firstData.app_modul_id,
-      },
-    });
-
-    if (!modul) {
-      throw new NotFoundError('Modul not found');
-    }
 
     const mapping = data.map((item) => {
       return {
         ...item,
-        app_category_modul_id: modul.app_category_modul_id,
       };
     });
 

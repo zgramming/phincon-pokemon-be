@@ -24,11 +24,24 @@ class AppCategoryModulService {
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
         },
       },
     });
 
-    return result;
+    const total = await prisma.appCategoryModul.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

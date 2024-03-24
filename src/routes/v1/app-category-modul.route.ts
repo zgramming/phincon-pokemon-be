@@ -1,15 +1,16 @@
 import express from 'express';
 import appCategoryModulController from '@controllers/app-category-modul.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', appCategoryModulController.get);
-router.get('/:id', appCategoryModulController.getById);
+router.get('/', expressAsyncHandler(appCategoryModulController.get));
+router.get('/:id', expressAsyncHandler(appCategoryModulController.getById));
 
-router.post('/', appCategoryModulController.create);
+router.post('/', expressAsyncHandler(appCategoryModulController.create));
 
-router.put('/:id', appCategoryModulController.update);
+router.put('/:id', expressAsyncHandler(appCategoryModulController.update));
 
-router.delete('/:id', appCategoryModulController.delete);
+router.delete('/:id', expressAsyncHandler(appCategoryModulController.delete));
 
 export default router;

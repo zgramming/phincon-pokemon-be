@@ -1,13 +1,19 @@
 import { BaseQueryParamsDTO } from '@dto/base-query-params.dto';
+import { kDirUploadMasterIcon } from '@utils/constant';
+import NotFoundError from '@utils/exceptions/notfound-error';
+import { moveFile } from '@utils/helpers';
 import { prisma } from '@utils/prisma';
+import formidable from 'formidable';
 
-interface FindAllQueryParams extends BaseQueryParamsDTO {}
+interface FindAllQueryParams extends BaseQueryParamsDTO {
+  name?: string;
+}
 
 interface MasterIconCreateDTO {
   name: string;
   code: string;
   status: any;
-  icon_url: string;
+  icon?: formidable.File;
   created_by: number;
 }
 
@@ -16,13 +22,31 @@ interface MasterIconUpdateDTO extends Partial<MasterIconCreateDTO> {
 }
 
 class MasterIconService {
-  async findAll({ limit, page }: FindAllQueryParams) {
+  async findAll({ limit, page, name }: FindAllQueryParams) {
     const result = await prisma.appMasterIcon.findMany({
       take: limit,
       skip: (page - 1) * limit,
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
     });
 
-    return result;
+    const total = await prisma.appMasterIcon.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    return {
+      result,
+      total,
+    };
   }
 
   async findById(id: number) {
@@ -36,26 +60,58 @@ class MasterIconService {
   }
 
   async create(data: MasterIconCreateDTO) {
-    const result = await prisma.appMasterIcon.create({
-      data: {
-        ...data,
-      },
+    const transaction = await prisma.$transaction(async (trx) => {
+      const result = await trx.appMasterIcon.create({
+        data: {
+          code: data.code,
+          name: data.name,
+          status: data.status,
+          icon_url: data.icon?.newFilename ?? '',
+        },
+      });
+
+      if (data.icon && result) {
+        moveFile(data.icon?.filepath ?? '', `${kDirUploadMasterIcon}/${result.icon_url}`);
+      }
     });
 
-    return result;
+    return transaction;
   }
 
   async update(id: number, data: MasterIconUpdateDTO) {
-    const result = await prisma.appMasterIcon.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-      },
+    const transaction = await prisma.$transaction(async (trx) => {
+      console.log({ data, id });
+
+      const masterIcon = await trx.appMasterIcon.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      if (!masterIcon) {
+        throw new NotFoundError('Master Icon not found');
+      }
+
+      const result = await trx.appMasterIcon.update({
+        where: {
+          id,
+        },
+        data: {
+          name: data.name ?? masterIcon.name,
+          code: data.code ?? masterIcon.code,
+          status: data.status ?? masterIcon.status,
+          icon_url: data.icon ? masterIcon.icon_url : undefined,
+        },
+      });
+
+      if (data.icon && result) {
+        moveFile(data.icon.filepath, `${kDirUploadMasterIcon}/${result.icon_url}`);
+      }
+
+      return result;
     });
 
-    return result;
+    return transaction;
   }
 
   async delete(id: number) {

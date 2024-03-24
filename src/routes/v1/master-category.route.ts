@@ -1,15 +1,16 @@
 import express from 'express';
 import masterCategoryController from '@controllers/master-category.controller';
+import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.get('/', masterCategoryController.get);
-router.get('/:id', masterCategoryController.getById);
+router.get('/', expressAsyncHandler(masterCategoryController.get));
+router.get('/:id', expressAsyncHandler(masterCategoryController.getById));
 
-router.post('/', masterCategoryController.create);
+router.post('/', expressAsyncHandler(masterCategoryController.create));
 
-router.put('/:id', masterCategoryController.update);
+router.put('/:id', expressAsyncHandler(masterCategoryController.update));
 
-router.delete('/:id', masterCategoryController.delete);
+router.delete('/:id', expressAsyncHandler(masterCategoryController.delete));
 
 export default router;

@@ -2,6 +2,7 @@ import { BaseQueryParamsDTO } from '@dto/base-query-params.dto';
 import { prisma } from '@utils/prisma';
 
 interface FindAllQueryParams extends BaseQueryParamsDTO {
+  category_modul_id?: number;
   name?: string;
 }
 
@@ -20,18 +21,42 @@ interface AppModulUpdateDTO extends Partial<AppModulCreateDTO> {
 }
 
 class AppModulService {
-  async findAll({ limit, page, name }: FindAllQueryParams) {
+  async findAll({ limit, page, name, category_modul_id }: FindAllQueryParams) {
     const result = await prisma.appModul.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
+        },
+        app_category_modul_id: category_modul_id,
+      },
+      include: {
+        app_category_modul: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
         },
       },
     });
 
-    return result;
+    const total = await prisma.appModul.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+        app_category_modul_id: category_modul_id,
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {
@@ -47,7 +72,12 @@ class AppModulService {
   async create(data: AppModulCreateDTO) {
     const result = await prisma.appModul.create({
       data: {
-        ...data,
+        code: data.code,
+        name: data.name,
+        order: data.order,
+        status: data.status,
+        created_by: data.created_by,
+        app_category_modul_id: data.app_category_modul_id,
       },
     });
 

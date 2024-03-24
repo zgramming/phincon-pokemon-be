@@ -4,81 +4,86 @@ import { Request, Response } from 'express';
 class AppModulControler {
   constructor(private appModulService: AppModulService) {}
 
-  async get(req: Request, res: Response) {
+  get = async (req: Request, res: Response) => {
     const query = req.query;
-    const { page = 1, limit = 100 } = query || {};
+    const page = query.page || 1;
+    const limit = query.limit || 100;
+    const name = query.name as string | undefined;
+    const categoryModulId = query.category_modul_id as string | undefined;
 
-    const result = await this.appModulService.findAll({
+    const { data: result, total } = await this.appModulService.findAll({
       page: +page,
       limit: +limit,
-      name: query.name as string | undefined,
+      name,
+      category_modul_id: categoryModulId ? +categoryModulId : undefined,
     });
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
+        total,
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async getById(req: Request, res: Response) {
+  getById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.appModulService.findById(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async create(req: Request, res: Response) {
+  create = async (req: Request, res: Response) => {
     const data = req.body;
 
     const result = await this.appModulService.create(data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(201);
-  }
+  };
 
-  async update(req: Request, res: Response) {
+  update = async (req: Request, res: Response) => {
     const data = req.body;
     const { id } = req.params;
 
     const result = await this.appModulService.update(+id, data);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const result = await this.appModulService.delete(+id);
 
-    return res
+    res
       .json({
         error: false,
         message: 'Success',
         data: result,
       })
       .status(200);
-  }
+  };
 }
 
 export default new AppModulControler(new AppModulService());

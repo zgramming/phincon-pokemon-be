@@ -4,6 +4,8 @@ import { prisma } from '@utils/prisma';
 
 interface FindAllQueryParams extends BaseQueryParamsDTO {
   name?: string;
+  modul_id?: number;
+  category_modul_id?: number;
 }
 interface AppMenuCreateDTO {
   app_menu_id_parent?: number;
@@ -22,18 +24,51 @@ interface AppMenuUpdateDTO extends Partial<AppMenuCreateDTO> {
 }
 
 class AppMenuService {
-  async findAll({ limit, page, name }: FindAllQueryParams) {
+  async findAll({ limit, page, name, category_modul_id, modul_id }: FindAllQueryParams) {
     const result = await prisma.appMenu.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
+        },
+        app_category_modul_id: category_modul_id,
+        app_modul_id: modul_id,
+      },
+      include: {
+        app_category_modul: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+          },
+        },
+        app_modul: {
+          select: {
+            id: true,
+            name: true,
+            code: true,
+          },
         },
       },
     });
 
-    return result;
+    const total = await prisma.appMenu.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+        app_category_modul_id: category_modul_id,
+        app_modul_id: modul_id,
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

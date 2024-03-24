@@ -263,3 +263,20 @@ model Users {
 
   @@map("users")
 }
+
+model TemplateDokumen {
+  id       Int          @id @default(autoincrement())
+  code     String       @unique @db.VarChar(50)
+  name     String       @db.VarChar(100)
+  template String       @db.Text()
+  status   CommonStatus @default(active)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  created_by Int?
+  updated_by Int?
+
+  @@map("template_dokumen")
+}
+
+// End System Modul Schema

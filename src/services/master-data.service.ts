@@ -4,6 +4,7 @@ import { prisma } from '@utils/prisma';
 
 interface FindAllQueryParams extends BaseQueryParamsDTO {
   name?: string;
+  master_category_id?: string;
 }
 interface MasterDataCreateDTO {
   master_data_parent_id?: number;
@@ -28,18 +29,41 @@ interface MasterDataUpdateDTO extends Partial<MasterDataCreateDTO> {
 }
 
 class MasterDataService {
-  async findAll({ limit, page, name }: FindAllQueryParams) {
+  async findAll({ limit, page, name, master_category_id }: FindAllQueryParams) {
     const result = await prisma.masterData.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         name: {
           contains: name,
+          mode: 'insensitive',
+        },
+        master_category_id: master_category_id ? +master_category_id : undefined,
+      },
+      include: {
+        master_category: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
         },
       },
     });
 
-    return result;
+    const total = await prisma.masterData.count({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findById(id: number) {

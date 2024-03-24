@@ -1,5 +1,7 @@
+import { AuthLoginResponseEntity } from '@entities/auth-login-response.entity';
 import AuthenticationError from '@utils/exceptions/authentication-error';
 import NotFoundError from '@utils/exceptions/notfound-error';
+import { generateTokenJWT } from '@utils/helpers';
 import { prisma } from '@utils/prisma';
 import { compareSync } from 'bcrypt';
 
@@ -10,7 +12,7 @@ interface AuthLoginDTO {
 
 class AuthService {
   async login(data: AuthLoginDTO) {
-    const userByUsername = await prisma.users.findUnique({
+    const userByUsername = await prisma.users.findFirst({
       where: {
         username: data.username,
       },
@@ -25,7 +27,16 @@ class AuthService {
       throw new AuthenticationError('Invalid password');
     }
 
-    return userByUsername;
+    const payload: AuthLoginResponseEntity = {
+      userId: userByUsername.id,
+      username: userByUsername.username,
+      roleId: userByUsername.role_id,
+    };
+    const token = generateTokenJWT(payload);
+
+    return {
+      token,
+    };
   }
 
   async accessibleContent(roleId: number) {
