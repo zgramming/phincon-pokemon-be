@@ -4,6 +4,7 @@ import express from 'express';
 import routes from '@routes/api';
 import { isPrismaConnected } from '@utils/prisma';
 import { handlingErrorMiddleware } from '@middlewares/handling-error.middleware';
+import allowCrossDomain from '@middlewares/cross-domain.middleware';
 
 // Load environment variables
 dotEnv.config();
@@ -15,6 +16,7 @@ isPrismaConnected();
 
 app.use(express.static('public'));
 app.use(cors());
+app.use(allowCrossDomain);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
