@@ -2,7 +2,6 @@ import cors from 'cors';
 import dotEnv from 'dotenv';
 import express from 'express';
 import routes from '@routes/api';
-import { isPrismaConnected } from '@utils/prisma';
 import { handlingErrorMiddleware } from '@middlewares/handling-error.middleware';
 import allowCrossDomain from '@middlewares/cross-domain.middleware';
 
@@ -11,8 +10,6 @@ dotEnv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
-isPrismaConnected();
 
 app.use(express.static('public'));
 app.use(cors());
