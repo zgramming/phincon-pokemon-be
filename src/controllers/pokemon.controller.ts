@@ -27,6 +27,7 @@ class PokemonController {
       .json({
         error: false,
         message: result.message,
+        number: result.number,
         data: result.released,
       })
       .status(200);
@@ -34,16 +35,19 @@ class PokemonController {
 
   renamePokemon = async (req: Request, res: Response) => {
     const { name } = req.params;
-    const { sequenceFibonacci } = req.body;
+    const { sequenceFibonnaci, newName } = req.body;
 
-    const result = this.pokemonService.renamePokemon(name, sequenceFibonacci);
+    const result = this.pokemonService.renamePokemon(name, {
+      newName,
+      sequenceFibonnaci,
+    });
 
     res
       .json({
         error: false,
         message: result.message,
         data: {
-          oldName: name,
+          currentFibonacci: result.currentFibonacci,
           newName: result.newName,
         },
       })

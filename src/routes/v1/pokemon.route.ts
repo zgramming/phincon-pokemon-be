@@ -4,8 +4,8 @@ import expressAsyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-router.post('/pokemon/catch/:name', expressAsyncHandler(pokemonController.catchPokemon));
-router.post('/pokemon/release/:name', expressAsyncHandler(pokemonController.releasePokemon));
-router.post('/pokemon/rename/:name', expressAsyncHandler(pokemonController.renamePokemon));
+router.post('/catch/:name', expressAsyncHandler(pokemonController.catchPokemon));
+router.put('/rename/:name', expressAsyncHandler(pokemonController.renamePokemon));
+router.delete('/release/:name', expressAsyncHandler(pokemonController.releasePokemon));
 
 export default router;

@@ -1,6 +1,6 @@
 interface RenamePokemonDTO {
   newName: string;
-  sequenceFibonacci: number[];
+  sequenceFibonnaci: number[];
 }
 
 class PokemonService {
@@ -29,21 +29,24 @@ class PokemonService {
     if (isPrime) {
       return {
         released: true,
+        number: randomNumber,
         message: `Pokemon ${name} was released!`,
       };
     } else {
       return {
         released: false,
+        number: randomNumber,
         message: `Pokemon ${name} was not released!`,
       };
     }
   }
 
   renamePokemon(oldName: string, data: RenamePokemonDTO) {
-    const nextSequenceFibonacci = this.getNextSequenceFibonacci(data.sequenceFibonacci);
+    const nextSequenceFibonacci = this.getNextSequenceFibonacci(data.sequenceFibonnaci);
     const result = `${data.newName}-${nextSequenceFibonacci}`;
 
     return {
+      currentFibonacci: [...data.sequenceFibonnaci, nextSequenceFibonacci],
       message: `Pokemon ${oldName} was renamed to ${result}`,
       newName: result,
     };
